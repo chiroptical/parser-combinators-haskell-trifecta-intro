@@ -1,0 +1,9 @@
+_minted-parsing/
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.toc
+.stack-work/

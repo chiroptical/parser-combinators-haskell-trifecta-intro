@@ -1,0 +1,202 @@
+%\PassOptionsToPackae{gray}{xcolor}
+\documentclass[hyperref={pdfpagelabels=false},12pt]{beamer}
+\setbeamertemplate{frametitle}[default][center]
+\mode<presentation>
+{
+ \usetheme{Warsaw}      % or try Darmstadt, Madrid, Warsaw, ...
+ \usecolortheme{default} % or try albatross, beaver, crane, ...
+ \usefonttheme{default}  % or try serif, structurebold, ...
+ \setbeamertemplate{footline}[frame number]
+ \setbeamertemplate{caption}[numbered]
+}
+
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{helvet}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{array}
+\usepackage{times}
+\usepackage{xcolor}
+\usepackage{default}
+\usepackage{ulem}
+\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+% Great Commands
+\newcommand{\ig}[2]{\includegraphics[width=#1\linewidth]{#2}}
+\newcommand{\mybutton}[2]{\hyperlink{#1}{\beamerbutton{{#2}}}}
+\newcommand{\myvbutton}[2]{\vfill\hyperlink{#1}{\beamerbutton{{#2}}}}
+\newcommand{\code}[2]{\mintinline{#1}{#2}}
+\newcommand{\haskell}[1]{\mintinline{haskell}{#1}}
+\newcommand{\unnamedUrl}[1]{\href{#1}{\color{blue}{#1}}}
+\newcommand{\namedUrl}[2]{\href{#1}{\color{blue}{#2}}}
+\newcommand{\pygment}[3]{\inputminted[bgcolor=lightgray,linenos,fontsize=#1]{#2}{#3}}
+\newcommand{\pygmentLines}[5]{\inputminted[bgcolor=lightgray,linenos,fontsize=#1,firstline=#2,lastline=#3]{#4}{#5}}
+
+% Color Scheme
+\definecolor{pittblue}{RGB}{28,41,87}
+\definecolor{pittgold}{RGB}{205,184,125}
+\setbeamercolor{structure}{fg=pittgold}
+\setbeamercolor{button}{bg=pittblue}
+
+\title[Parsing]{{Baby's First Parsing with Haskell and Trifecta}}
+\author[Parsing]{{Barry Moore II}}
+\institute[CRC]{Center for Research Computing \\ University of Pittsburgh}
+\date{}
+
+\beamertemplatenavigationsymbolsempty
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \begin{itemize}
+    \item Applicative Functors
+    \item Introduction to Trifecta and Parsers
+    \item In-depth Examples
+    \begin{itemize}
+      \item Semantic Versions
+      \item IPv4 Addresses
+      \item United States Telephone Numbers
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Functor}
+  \pygment{\normalsize}{haskell}{code/Functor.hs}
+  \begin{itemize}
+    \item The function \haskell{(a -> b)} is ``lifted'' into the structure \haskell{f}
+  \end{itemize}  
+  \pygment{\normalsize}{haskell}{code/FunctorLift.hs}
+\end{frame}
+
+\begin{frame}{Functor Example}
+  \pygment{\normalsize}{haskell}{code/FunctorExample.hs}
+  \begin{itemize}
+    \item \haskell{f :: []}
+    \begin{itemize}
+      \item \haskell{fmap} is implemented for list!
+    \end{itemize}
+    \item \haskell{a :: Integer}
+    \item \haskell{(a -> b) :: Integer -> Integer}
+    \item Result: \haskell{[3, 4, 5]}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Applicative Functor}
+  \pygment{\normalsize}{haskell}{code/Applicative.hs}
+  \vspace{-0.5cm}
+  \begin{itemize}
+    \item \haskell{(<*>)} is pronounced ``apply''
+    \item Here, our \haskell{(a -> b)} is embedded in structure, another list example:
+  \end{itemize}
+  \pygment{\normalsize}{haskell}{code/ApplicativeExample.hs}
+  \vspace{-0.5cm}
+  \begin{itemize}
+    \item \haskell{(+) :: Integer -> Integer -> Integer}
+    \item \haskell{(1+) :: Integer -> Integer}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Parser Combinators}
+  \begin{itemize}
+    \item Bible on Parser Combinators (Graham Hutton and Erik Meijer): \unnamedUrl{http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf}
+    \item Packages and listed maintainer (design is quite similar amongst them):
+    \begin{itemize}
+      \item Trifecta (Edward Kmett): \unnamedUrl{https://hackage.haskell.org/package/trifecta}
+      \item Attoparsec (Bryan O'Sullivan) \unnamedUrl{http://hackage.haskell.org/package/attoparsec}
+      \item Megaparsec (Mark Karpov) \unnamedUrl{http://hackage.haskell.org/package/megaparsec}
+      \item Parsec (Herbert Valerio Riedel) \unnamedUrl{http://hackage.haskell.org/package/parsec}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Parser Combinators Cont.}
+  \begin{itemize}
+    \item Parsing is really a two part process
+    \begin{enumerate}
+      \item ``parse'' the text
+      \item ``marshalling'' into a useful datatype
+    \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Parser Combinators Example}
+  \setbeamercovered{invisible}
+  \onslide*<1,5>{
+    \pygment{\scriptsize}{haskell}{code/rational/src/Main.hs}
+  }
+  \onslide*<2>{
+    \pygmentLines{\scriptsize}{6}{7}{haskell}{code/rational/src/Main.hs}
+    \begin{itemize}
+      \item \haskell{Parser a} and \haskell{Result a} are both Monads
+      \item \haskell{a} is the marshalled datatype
+      \item \haskell{parseString} comes from Trifecta
+      \item \haskell{mempty} is a \haskell{Text.Trifecta.Delta}
+      \begin{itemize}
+        \item A ``Delta'' keeps track of the cursor position of the parser,
+          so it can be referred to later, for example in error messages.
+      \end{itemize}
+    \end{itemize}
+  }
+  \onslide*<3>{
+    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Main.hs}
+    \begin{itemize}
+      \item \texttt{1 \% 2} forms the rational $\frac{1}{2}$
+      \item \haskell{decimal} parses a single number (think \haskell{Parser Integer})
+      \item Use \haskell{fmap} to partially apply, \haskell{Parser (Integer -> Rational)}
+      \item \haskell{(*>)} is called sequence, it completes both parsers and keeps the result of the second
+    \end{itemize}
+  }
+  \onslide*<4>{
+    \pygmentLines{\scriptsize}{15}{17}{haskell}{code/rational/src/Main.hs}
+    \begin{itemize}
+      \item The \haskell{main} function is the entry point to this script
+      \item \haskell{print} will output a \haskell{Result Rational}
+      \item \haskell{p} takes a \haskell{Parser Rational} and a \haskell{String}
+      \item Result: \texttt{Success (1 \% 1)}
+    \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}{Parser Combinators Example Cont.}
+  \setbeamercovered{invisible}
+  \begin{itemize}
+    \item Does anyone see an issue with this parser?
+    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Main.hs}
+    \uncover<2->{
+      \item What if we pass it \haskell{"1/0"}?
+    }
+    \uncover<3->{
+      \pygmentLines{\scriptsize}{9}{17}{haskell}{code/rational/src/Main.1.hs}
+    }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Useful Combinators Documentation}
+  \begin{itemize}
+    \item Trifecta uses parsers from the \texttt{parsers} package (also Edward Kmett):
+    \begin{itemize}
+      \item \unnamedUrl{https://hackage.haskell.org/package/parsers-0.12.10/docs/Text-Parser-Char.html}
+      \item \unnamedUrl{https://hackage.haskell.org/package/parsers-0.12.10/docs/Text-Parser-Combinators.html}
+      \item \unnamedUrl{https://hackage.haskell.org/package/parsers-0.12.10/docs/Text-Parser-Token.html}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Semantic Version Parser}
+\end{frame}
+
+\begin{frame}{IPv4 Address Parser}
+\end{frame}
+
+\begin{frame}{United States Phone Number Parser}
+\end{frame}
+
+\end{document}
