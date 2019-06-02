@@ -62,7 +62,6 @@ parsePhoneNumber'' = (PhoneNumber <$> numberingPlanArea)
                              *> threeDigits
         parensPattern = char '(' *> threeDigits <* char ')'
         numberingPlanArea = countryCodePattern <|>
-                            threeDigits <|>
                             parensPattern
         dashOrSpace = char '-' <|> char ' '
         tupled :: Parser (Exchange, LineNumber)
