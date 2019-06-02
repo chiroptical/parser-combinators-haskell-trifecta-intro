@@ -81,7 +81,7 @@
   \begin{itemize}
     \item \haskell{f :: []}
     \begin{itemize}
-      \item \haskell{fmap} is implemented for list!
+      \item List is a Functor!
     \end{itemize}
     \item \haskell{a :: Integer}
     \item \haskell{(a -> b) :: Integer -> Integer}
@@ -106,7 +106,7 @@
 
 \begin{frame}{Parser Combinators}
   \begin{itemize}
-    \item Bible on Parser Combinators (Graham Hutton and Erik Meijer): \unnamedUrl{http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf}
+    \item Parser Combinators Bible? (Graham Hutton and Erik Meijer): \unnamedUrl{http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf}
     \item Packages and listed maintainer (design is quite similar amongst them):
     \begin{itemize}
       \item Trifecta (Edward Kmett): \unnamedUrl{https://hackage.haskell.org/package/trifecta}
@@ -119,7 +119,7 @@
 
 \begin{frame}{Parser Combinators Cont.}
   \begin{itemize}
-    \item Parsing is really a two part process
+    \item Parsing is actually a two step process
     \begin{enumerate}
       \item ``parse'' the text
       \item ``marshalling'' into a useful datatype
@@ -141,7 +141,7 @@
       \item \haskell{mempty} is a \haskell{Text.Trifecta.Delta}
       \begin{itemize}
         \item A ``Delta'' keeps track of the cursor position of the parser,
-          so it can be referred to later, for example in error messages.
+          so it can be referred to later, e.g. in error messages.
       \end{itemize}
     \end{itemize}
   }
@@ -157,7 +157,7 @@
   \onslide*<4>{
     \pygmentLines{\scriptsize}{15}{17}{haskell}{code/rational/src/Main.hs}
     \begin{itemize}
-      \item The \haskell{main} function is the entry point to this script
+      \item The \haskell{main} function is the entry point for Haskell
       \item \haskell{print} will output a \haskell{Result Rational}
       \item \haskell{p} takes a \haskell{Parser Rational} and a \haskell{String}
       \item Result: \texttt{Success (1 \% 1)}
@@ -190,13 +190,165 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Semantic Version Parser}
+\begin{frame}{Notes on Examples}
+  \begin{itemize}
+    \item Each example is a separate Stack project:
+    \begin{itemize}
+      \item Get \code{bash}{stack}: \unnamedUrl{https://docs.haskellstack.org/en/stable/README/}
+      \item Run each project: \code{bash}{stack run}
+    \end{itemize}
+    \item Rational Parser: \code{bash}{code/rational}
+    \item Semantic Version Parser: \code{bash}{code/semanticVersions}
+    \item IPv4 Address Parser: \code{bash}{code/ipv4Address}
+    \item US Phone Number Parser: \code{bash}{code/phoneNumber}
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{IPv4 Address Parser}
+\begin{frame}{Semantic Version Exercise: Problem and Types}
+  \setbeamercovered{invisible}
+  \pygmentLines{\scriptsize}{58}{65}{haskell}{code/semanticVersions/src/Main.hs}
+  \uncover<2->{
+    \pygmentLines{\scriptsize}{22}{30}{haskell}{code/semanticVersions/src/Main.hs}
+  }
 \end{frame}
 
-\begin{frame}{United States Phone Number Parser}
+\begin{frame}{Semantic Version Exercise: Types Cont.}
+  \pygmentLines{\normalsize}{7}{20}{haskell}{code/semanticVersions/src/Main.hs}
+\end{frame}
+
+\begin{frame}{Semantic Version Exercise: Parser}
+  \setbeamercovered{invisible}
+  \onslide*<1>{
+    \pygmentLines{\normalsize}{32}{39}{haskell}{code/semanticVersions/src/Main.hs}
+  }
+  \onslide*<2>{
+    \pygmentLines{\scriptsize}{48}{54}{haskell}{code/semanticVersions/src/Main.hs}
+    \begin{itemize}
+      \item Goal, parse either:
+      \begin{itemize}
+        \item a number which doesn't start with \haskell{0} 
+        \item The number \haskell{0}
+      \end{itemize}
+      \item \haskell{fmap read ::} \haskell{Parser String -> Parser Integer}
+    \end{itemize}
+  }
+  \onslide*<3>{
+    \pygmentLines{\scriptsize}{41}{44}{haskell}{code/semanticVersions/src/Main.hs}
+    \begin{itemize}
+      \vspace{-0.5cm}
+      \item \haskell{optional p :: Parser (Maybe a)}
+      \item \haskell{optionally ::} \haskell{Parser (Maybe [NumberOrString]) ->} \haskell{Parser [NumberOrString]}
+      \item \haskell{symbol} -- parses string and skips trailing whitespace
+    \end{itemize}
+    \pygmentLines{\scriptsize}{55}{56}{haskell}{code/semanticVersions/src/Main.hs}
+  }
+  \onslide*<4>{
+    \pygmentLines{\scriptsize}{45}{47}{haskell}{code/semanticVersions/src/Main.hs}
+    \begin{itemize}
+      \item Extremely similar to \haskell{prerelease}
+    \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}{Semantic Version Exercise}
+  \Huge \code{bash}{stack run}
+\end{frame}
+
+\begin{frame}{IPv4 Address Exercise: Problem and Types}
+  \setbeamercovered{invisible}
+  \pygmentLines{\scriptsize}{40}{45}{haskell}{code/ipv4Address/src/Main.hs}
+  \uncover<2->{
+    \pygmentLines{\scriptsize}{8}{12}{haskell}{code/ipv4Address/src/Main.hs}
+  }
+\end{frame}
+
+\begin{frame}{IPv4 Address Exercise: Parser}
+  \setbeamercovered{invisible}
+  \onslide*<1>{
+    \pygmentLines{\normalsize}{17}{18}{haskell}{code/ipv4Address/src/Main.hs}
+  }
+  \onslide*<2>{
+    \pygmentLines{\scriptsize}{20}{23}{haskell}{code/ipv4Address/src/Main.hs}
+    \begin{itemize}
+      \item \haskell{shift v s} -- shift \haskell{v} left by \haskell{s} bits
+      \item fold shifted values onto \haskell{0} to generate a \haskell{Word32}
+    \end{itemize}
+  }
+  \onslide*<3>{
+    \pygmentLines{\scriptsize}{30}{38}{haskell}{code/ipv4Address/src/Main.hs}
+    \begin{itemize}
+      \item \haskell{octets} -- list of 4 values, all \haskell{<= 255}
+    \end{itemize}
+  }
+  \onslide*<4>{
+    \pygmentLines{\scriptsize}{24}{29}{haskell}{code/ipv4Address/src/Main.hs}
+  }
+\end{frame}
+
+\begin{frame}{IPv4 Address Exercise}
+  \Huge \code{bash}{stack run}
+\end{frame}
+
+\begin{frame}{US Phone Number Exercise: Problem and Types}
+  \setbeamercovered{invisible}
+  A bit more annoying in Applicative than the others...
+  \pygmentLines{\scriptsize}{79}{87}{haskell}{code/phoneNumber/src/Main.hs}
+  \uncover<2->{
+    \pygmentLines{\scriptsize}{11}{16}{haskell}{code/phoneNumber/src/Main.hs}
+  }
+\end{frame}
+
+\begin{frame}{US Phone Number Exercise: Parser}
+  \setbeamercovered{invisible}
+  \onslide*<1,4>{
+    \pygmentLines{\scriptsize}{51}{53}{haskell}{code/phoneNumber/src/Main.hs}
+  }
+  \onslide*<2>{
+    \pygmentLines{\scriptsize}{64}{66}{haskell}{code/phoneNumber/src/Main.hs}
+    \begin{itemize}
+      \item Either:
+      \begin{itemize}
+        \item country code ``pattern'': +1-\textbf{123}
+        \item area code: \textbf{123}
+        \item area code w/ parenthesis: (\textbf{123})
+      \end{itemize}
+    \end{itemize}
+    \pygmentLines{\scriptsize}{57}{62}{haskell}{code/phoneNumber/src/Main.hs}
+  }
+  \onslide*<3>{
+    \pygmentLines{\scriptsize}{55}{56}{haskell}{code/phoneNumber/src/Main.hs}
+    \pygmentLines{\scriptsize}{63}{63}{haskell}{code/phoneNumber/src/Main.hs}
+    \begin{itemize}
+      \item \haskell{nDigits} -- return \haskell{Parser Integer} with \haskell{n} digits
+    \end{itemize}
+  }
+  \onslide*<5>{
+    \pygmentLines{\scriptsize}{68}{76}{haskell}{code/phoneNumber/src/Main.hs}
+  }
+  \onslide*<6>{
+    \pygmentLines{\scriptsize}{51}{53}{haskell}{code/phoneNumber/src/Main.hs}
+    \vspace{-0.5cm}
+    \pygmentLines{\scriptsize}{77}{77}{haskell}{code/phoneNumber/src/Main.hs}
+    \vspace{-0.5cm}
+    \begin{itemize}
+      \item \haskell{f :: Parser} \haskell{(Exchange -> LineNumber -> PhoneNumber)}
+      \item \haskell{a :: Parser (Exchange, LineNumber)}
+      \item \haskell{uncurry :: (a -> b -> c) -> (a, b) -> c}
+      \item \haskell{c :: Parser PhoneNumber}
+    \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}{US Phone Number Exercise}
+  \Huge \code{bash}{stack run}
+\end{frame}
+
+\begin{frame}{Wrapping Up}
+  \begin{itemize}
+    \item HPFPP used the Monadic context, but stream wanted to use the Applicative context
+    \item It was fun trying to write these in the Applicative where possible
+    \item Code: \unnamedUrl{https://github.com/barrymoo/parser-combinators-haskell-trifecta-intro}
+  \end{itemize}
 \end{frame}
 
 \end{document}

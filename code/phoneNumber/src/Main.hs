@@ -49,13 +49,21 @@ parsePhoneNumber' =
             lineNumber = nDigits 4
 
 parsePhoneNumber'' :: Parser PhoneNumber 
-parsePhoneNumber'' = (PhoneNumber <$> numberingPlanArea) `applyTuple` tupled
+parsePhoneNumber'' = (PhoneNumber <$> numberingPlanArea)
+                     `applyTuple` tupled
     where
         nDigits n = read <$> (count n $ oneOf "1234567890")
         threeDigits = nDigits 3
-        countryCodePattern = (optional $ (try $ char '+' *> integer *> char '-')) *> threeDigits
+        countryCodePattern = (optional $ 
+                                (try $
+                                    char '+' *>
+                                    integer *>
+                                    char '-'))
+                             *> threeDigits
         parensPattern = char '(' *> threeDigits <* char ')'
-        numberingPlanArea = countryCodePattern <|> threeDigits <|> parensPattern
+        numberingPlanArea = countryCodePattern <|>
+                            threeDigits <|>
+                            parensPattern
         dashOrSpace = char '-' <|> char ' '
         tupled :: Parser (Exchange, LineNumber)
         tupled = do

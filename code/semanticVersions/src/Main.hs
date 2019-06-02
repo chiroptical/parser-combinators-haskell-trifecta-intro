@@ -31,19 +31,29 @@ data SemVer =
 
 parseSemVer :: Parser SemVer
 parseSemVer =
-  SemVer <$> versionElement <* char '.' <*> versionElement <* char '.' <*>
+  SemVer <$>
+  versionElement <* char '.' <*>
+  versionElement <* char '.' <*>
   versionElement <*>
   prerelease <*>
   metadata
   where
     optionally p = fromMaybe [] <$> optional p
-    prerelease = optionally $ char '-' *> (numberOrString `sepBy` (symbol "."))
-    metadata = optionally $ char '+' *> (numberOrString `sepBy` (symbol "."))
+    prerelease = optionally $
+                 char '-' *>
+                 (numberOrString `sepBy` (symbol "."))
+    metadata = optionally $
+               char '+' *>
+               (numberOrString `sepBy` (symbol "."))
     versionElement =
       fmap read $
-      ((:) <$> oneOf "123456789" <*> many (oneOf "0123456789") <|>
-       some (char '0'))
-    numberOrString = (NOSI <$> integer) <|> (NOSS <$> some alphaNum)
+      ((:) <$>
+       oneOf "123456789" <*>
+       many (oneOf "0123456789") <|>
+       some (char '0')
+      )
+    numberOrString = (NOSI <$> integer) <|>
+                     (NOSS <$> some alphaNum)
 
 one :: String
 one = "1.0.0-gamma+002"
