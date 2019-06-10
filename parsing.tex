@@ -34,7 +34,7 @@
 \newcommand{\unnamedUrl}[1]{\href{#1}{\color{blue}{#1}}}
 \newcommand{\namedUrl}[2]{\href{#1}{\color{blue}{#2}}}
 \newcommand{\pygment}[3]{\inputminted[bgcolor=lightgray,linenos,fontsize=#1]{#2}{#3}}
-\newcommand{\pygmentLines}[5]{\inputminted[bgcolor=lightgray,linenos,fontsize=#1,firstline=#2,lastline=#3]{#4}{#5}}
+\newcommand{\pygmentLines}[5]{\inputminted[bgcolor=lightgray,linenos,fontsize=#1,firstline=#2,lastline=#3,autogobble]{#4}{#5}}
 
 % Color Scheme
 \definecolor{pittblue}{RGB}{28,41,87}
@@ -135,7 +135,7 @@
   \onslide*<2>{
     \pygmentLines{\scriptsize}{6}{7}{haskell}{code/rational/src/Main.hs}
     \begin{itemize}
-      \item \haskell{Parser a} and \haskell{Result a} are both Monads
+      \item \haskell{Parser a} and \haskell{Result a} both have Monad instances
       \item \haskell{a} is the marshalled datatype
       \item \haskell{parseString} comes from Trifecta
       \item \haskell{mempty} is a \haskell{Text.Trifecta.Delta}
@@ -151,7 +151,8 @@
       \item \texttt{1 \% 2} forms the rational $\frac{1}{2}$
       \item \haskell{decimal} parses a single number (think \haskell{Parser Integer})
       \item Use \haskell{fmap} to partially apply, \haskell{Parser (Integer -> Rational)}
-      \item \haskell{(*>)} is called sequence, it completes both parsers and keeps the result of the second
+      \item \haskell{(*>)} is the sequence operator for \haskell{Applicative},
+          it completes both parsers and keeps the result of the second
     \end{itemize}
   }
   \onslide*<4>{
@@ -345,9 +346,15 @@
 
 \begin{frame}{Wrapping Up}
   \begin{itemize}
-    \item HPFPP used the Monadic context, but stream wanted to use the Applicative context
-    \item It was fun trying to write these in the Applicative where possible
+    \item HPFPP used the Monadic \haskell{do} syntax everywhere
+    \item However, \haskell{Applicative} is enough in many cases
+    \item Parser Combinators feel very powerful in Haskell, but error messages are frequently cryptic
+    \item Trifecta is a nice introduction, but my understanding is other libraries can be more efficient
     \item Code: \unnamedUrl{https://github.com/barrymoo/parser-combinators-haskell-trifecta-intro}
+    \begin{itemize}
+        \item To do: add HUnit tests
+        \item Question: is there a library that creates automatic failure cases for parsers?
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
