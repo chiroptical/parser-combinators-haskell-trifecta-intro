@@ -84,6 +84,7 @@ validSix = "(123) 456-7890"
 
 invalidOne = "(332-222-4444"
 invalidTwo = "+1-123-456 7890"
+invalidThree = "(332-222 4444"
 
 p :: Parser a -> String -> Result a
 p f = parseString f mempty
@@ -98,3 +99,4 @@ main = do
   print $ p parsePhoneNumber'' validSix
   print $ p parsePhoneNumber'' invalidOne
   print $ p parsePhoneNumber'' invalidTwo
+  print $ p parsePhoneNumber'' invalidThree
