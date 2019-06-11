@@ -34,7 +34,7 @@ parseIPAddress = IPAddress <$> ipAddr
         4 -> do
           case all (<= 255) xs of
             True -> return xs
-            _    -> fail "IPAddress octets must be less than 255"
+            _    -> fail "IPAddress octets must be less than 256"
         _ -> fail "IPAddress must have 4 octets"
 
 validOne = "192.168.0.1"
