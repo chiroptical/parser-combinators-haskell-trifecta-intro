@@ -50,7 +50,7 @@ parseSemVer =
       ((:) <$>
        oneOf "123456789" <*>
        many (oneOf "0123456789") <|>
-       some (char '0')
+       string "0"
       )
     numberOrString = (NOSI <$> integer) <|>
                      (NOSS <$> some alphaNum)
@@ -64,6 +64,9 @@ two = "1.0.0-beta+oof.sha.41af286"
 three :: String
 three = "1.0.0-x.7.z.92"
 
+four :: String
+four = "00.0.0-x.7.z.92"
+
 p :: Parser a -> String -> Result a
 p f = parseString f mempty
 
@@ -72,3 +75,4 @@ main = do
   print $ p parseSemVer one
   print $ p parseSemVer two
   print $ p parseSemVer three
+  print $ p parseSemVer four
