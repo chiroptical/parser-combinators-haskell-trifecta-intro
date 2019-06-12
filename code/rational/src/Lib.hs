@@ -1,4 +1,4 @@
-module Main where
+module Lib where
 
 import           Data.Ratio    ((%))
 import           Text.Trifecta
@@ -10,12 +10,14 @@ parseRational :: Parser Rational
 parseRational = (%) <$> numer <*> (char '/' *> denom)
   where
     numer = decimal
+    denom = decimal
+
+parseRational' :: Parser Rational
+parseRational' = (%) <$> numer <*> (char '/' *> denom)
+  where
+    numer = decimal
     denom = do
       d <- decimal
       case d of
         0 -> fail "denominator cannot be zero"
         _ -> return d
-
-main :: IO ()
-main = do
-  print $ p parseRational "1/1"

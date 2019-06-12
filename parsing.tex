@@ -130,10 +130,10 @@
 \begin{frame}{Parser Combinators Example}
   \setbeamercovered{invisible}
   \onslide*<1,5>{
-    \pygment{\scriptsize}{haskell}{code/rational/src/Main.hs}
+    \pygmentLines{\scriptsize}{3}{13}{haskell}{code/rational/src/Lib.hs}
   }
   \onslide*<2>{
-    \pygmentLines{\scriptsize}{6}{7}{haskell}{code/rational/src/Main.hs}
+    \pygmentLines{\scriptsize}{6}{7}{haskell}{code/rational/src/Lib.hs}
     \begin{itemize}
       \item \haskell{Parser a} and \haskell{Result a} both have Monad instances
       \item \haskell{a} is the marshalled datatype
@@ -146,7 +146,7 @@
     \end{itemize}
   }
   \onslide*<3>{
-    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Main.hs}
+    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Lib.hs}
     \begin{itemize}
       \item \texttt{1 \% 2} forms the rational $\frac{1}{2}$
       \item \haskell{decimal} parses a single number (think \haskell{Parser Integer})
@@ -156,7 +156,7 @@
     \end{itemize}
   }
   \onslide*<4>{
-    \pygmentLines{\scriptsize}{15}{17}{haskell}{code/rational/src/Main.hs}
+    \pygmentLines{\scriptsize}{6}{8}{haskell}{code/rational/app/Main.hs}
     \begin{itemize}
       \item The \haskell{main} function is the entry point for Haskell
       \item \haskell{print} will output a \haskell{Result Rational}
@@ -170,12 +170,12 @@
   \setbeamercovered{invisible}
   \begin{itemize}
     \item Does anyone see an issue with this parser?
-    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Main.hs}
+    \pygmentLines{\scriptsize}{9}{13}{haskell}{code/rational/src/Lib.hs}
     \uncover<2->{
       \item What if we pass it \haskell{"1/0"}?
     }
     \uncover<3->{
-      \pygmentLines{\scriptsize}{9}{17}{haskell}{code/rational/src/Main.1.hs}
+      \pygmentLines{\scriptsize}{15}{23}{haskell}{code/rational/src/Lib.hs}
     }
   \end{itemize}
 \end{frame}
