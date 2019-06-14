@@ -49,3 +49,5 @@ tests:
     dependencies:
     - rational
     - hspec
+    - hspec-expectations
+    - HUnit
