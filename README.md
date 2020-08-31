@@ -40,3 +40,20 @@ which I used for the presentation.
 - `code/semanticVersions` 
 - `code/ipv4Address`
 - `code/phoneNumber`
+
+#### Notes
+
+- To make a new release,
+
+```
+git tag -a v0.1a0 -m "Release v0.1a0"
+git push origin v0.1a0
+# Update default.nix
+nix-build # build the project, need to update sha256
+nix-store --query --references $(nix-instantiate shell.nix) \
+  | xargs nix-store --realise \
+  | xargs nix-store --query --requisites \
+  | cachix push chiroptical # cache the shell environment
+git commit -am "Release v0.1a0"
+git push
+```
