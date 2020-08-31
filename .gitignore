@@ -7,3 +7,4 @@ _minted-parsing/
 *.snm
 *.toc
 .stack-work/
+result

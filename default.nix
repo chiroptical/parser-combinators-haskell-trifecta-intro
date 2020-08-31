@@ -33,7 +33,7 @@ pkgs.stdenv.mkDerivation {
   buildInputs = inputs;
   src = builtins.fetchurl {
     url = "https://github.com/chiroptical/parser-combinators-haskell-trifecta-intro/archive/v0.1.tar.gz";
-    sha256 = "0qm5xbqnwrr2ylpgpdmqnngnm4z089f2an5694ff5zb8m08dpwdq";
+    sha256 = "0ivd8bzv4ws954iy29gybfq6v2hc1y2ia8b5ki6xqccwrvfi73bv";
   };
   buildPhase = ''
     source $stdenv/setup
