@@ -1,6 +1,9 @@
 Baby's First Parser Combinators w/ Haskell and Trifecta
 ---
 
+Latest Release:
+https://github.com/chiroptical/parser-combinators-haskell-trifecta-intro/releases/latest/download/parser-combinators-haskell-trifecta-intro.pdf
+
 My first haskell presentation ever! Please be nice...
 
 This presentation comes from working through Chapter 24 of [Haskell Programming
@@ -23,6 +26,8 @@ sudo apt install texlive texlive-latex-extra texlive-fonts-extra python3-pygment
 ## Compilation
 
 ```
+pdflatex -shell-escape parsing.tex
+pdflatex -shell-escape parsing.tex
 pdflatex -shell-escape parsing.tex
 ```
 
